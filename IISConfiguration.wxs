@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+	<Fragment>
+    <DirectoryRef Id="TARGETDIR">
+      <!--Creating an application pool-->
+      <Component Id="BlazorAppPool"
+                 Guid="{5766F29A-7FD5-4359-BD6C-5E5C543FEFFD}"
+                 KeyPath="yes"
+                 Win64="yes">
+        <iis:WebAppPool Id="BlazorAppPool"
+                        Name="BlazorAppWebSite"
+                        Identity="localSystem"
+                        ManagedPipelineMode="Integrated"
+                        ManagedRuntimeVersion="v4.0"/>
+      </Component>
+      <!--Setup IIS for Blazor App-->
+      <Component Id="InstallWebsite"
+                 Guid="{4AB0376B-F778-4D0F-8CA6-2F308AB7B077}"
+                 KeyPath="yes">
+        <iis:WebSite Id="BlazorApp"
+                     Description='BlazorAppWasm'
+                     Directory='INSTALLFOLDER'
+                     AutoStart='yes'
+                     StartOnInstall='yes'>
+          <iis:WebAddress Id="localhost_BlazorApp"
+                          Port="8085" IP="127.0.0.1"/>
+          <iis:WebApplication Id="BlazorWasmApplication"
+                              Name="Blazor Web Application"
+                              WebAppPool="BlazorAppPool"/>
+        </iis:WebSite>
+      </Component>
+
+    </DirectoryRef>
+
+    <ComponentGroup Id="BlazorAppIisConfiguration">
+      <ComponentRef Id="InstallWebsite"/>
+      <ComponentRef Id="BlazorAppPool"/>
+    </ComponentGroup>
+	</Fragment>
+</Wix>

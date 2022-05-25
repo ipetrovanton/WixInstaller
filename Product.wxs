@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="InstallerForBlazorApp" Language="1033" Version="1.0.0.0" Manufacturer="Developer" UpgradeCode="543f9f1d-2c37-403d-930c-f0eb8bf401ec">
+		<Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <!--<Feature Id="ProductFeature" Title="InstallerForBlazorApp" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>-->
+
+    <Media Id="1"
+           Cabinet="media.cab"
+           EmbedCab="yes"
+           DiskPrompt="CD-ROM #1" />
+    <Property Id="DiskPrompt"
+              Value="InstallerForBlazorApp CD-ROM #1" />
+
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" ></Property>
+    <UIRef Id="WixUI_InstallDir"/>
+
+    <Feature Id="BlazorAppFeature"
+             Title="BlazorWasmApplication"
+             Level="1"
+             ConfigurableDirectory="INSTALLFOLDER"
+             AllowAdvertise="no"
+             Absent='disallow'>
+      <ComponentGroupRef Id="BlazorAppIisConfiguration" />
+      <ComponentGroupRef Id="PublishedComponents" />
+    </Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="InstallerForBlazorApp" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<!--<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <ComponentGroupRef Id="PublishedComponents"/>
+		</ComponentGroup>
+	</Fragment>-->
+</Wix>
